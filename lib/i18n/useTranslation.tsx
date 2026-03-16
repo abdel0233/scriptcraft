@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, JSX } from "react";
 import en from "./en.json";
 import fr from "./fr.json";
 import ar from "./ar.json";
@@ -29,7 +29,7 @@ function detectBrowserLocale(): Locale {
     return "en";
 }
 
-export function I18nProvider({ children }: { children: React.ReactNode }) {
+export function I18nProvider({ children }: { children: React.ReactNode }): JSX.Element {
     const [locale, setLocaleState] = useState<Locale>("en");
 
     useEffect(() => {
