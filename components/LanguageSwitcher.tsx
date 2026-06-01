@@ -35,10 +35,10 @@ export default function LanguageSwitcher() {
         >
             <button
                 onClick={() => setOpen((v) => !v)}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg border border-white/10 bg-[#111] hover:border-[#C9A84C]/50 transition-all duration-150 text-sm text-white/80 hover:text-white"
+                className="flex items-center gap-2 px-3 py-2 rounded-lg border border-white/10 bg-[#111] hover:border-[#BAE600]/50 transition-all duration-150 text-sm text-white/80 hover:text-white"
                 aria-label="Switch language"
             >
-                <Globe size={14} className="text-[#C9A84C]" />
+                <Globe size={14} className="text-[#BAE600]" />
                 <span className="font-medium">{current.native}</span>
                 <svg
                     className={`w-3 h-3 text-white/40 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
@@ -62,7 +62,7 @@ export default function LanguageSwitcher() {
                             }}
                             className={`w-full text-start px-4 py-2.5 text-sm transition-colors duration-100
                 ${locale === lang.code
-                                    ? "text-[#C9A84C] bg-[#C9A84C]/10"
+                                    ? "text-[#BAE600] bg-[#BAE600]/10"
                                     : "text-white/70 hover:text-white hover:bg-white/5"
                                 }`}
                         >

@@ -13,8 +13,11 @@ export interface FormPayload {
     hookStyle: string;
     cta: string;
     competitors: string;
-    source: "ScriptCraft Portal";
+    source: "Flowmark Script writer Portal";
     submittedAt: string;
+    clientName?: string;
+    brandName?: string;
+    token?: string;
 }
 
 export interface Language {

@@ -38,17 +38,17 @@ export default function LanguageGrid({ selected, onChange, error }: LanguageGrid
                             onClick={() => toggle(lang.value)}
                             className={`relative rounded-xl border p-4 text-center transition-all duration-150 ease-out
                 ${isSelected
-                                    ? "border-[#C9A84C] bg-[#C9A84C]/5 scale-[1.02]"
+                                    ? "border-[#BAE600] bg-[#BAE600]/5 scale-[1.02]"
                                     : "border-white/10 bg-[#111] hover:border-white/25 hover:scale-[1.01]"
                                 }`}
                         >
                             {/* Order badge */}
                             {isSelected && (
-                                <span className="absolute -top-2.5 -end-2.5 w-5 h-5 rounded-full bg-[#C9A84C] text-[#0A0A0A] text-xs font-bold flex items-center justify-center animate-in zoom-in-50 duration-150">
+                                <span className="absolute -top-2.5 -end-2.5 w-5 h-5 rounded-full bg-[#BAE600] text-[#0A0A0A] text-xs font-bold flex items-center justify-center animate-in zoom-in-50 duration-150">
                                     {order}
                                 </span>
                             )}
-                            <div className={`font-bold text-sm leading-tight mb-1 ${isSelected ? "text-[#C9A84C]" : "text-white"}`}>
+                            <div className={`font-bold text-sm leading-tight mb-1 ${isSelected ? "text-[#BAE600]" : "text-white"}`}>
                                 {lang.label}
                             </div>
                             <div className="text-[#888] text-xs">{lang.subLabel}</div>
@@ -74,7 +74,7 @@ export default function LanguageGrid({ selected, onChange, error }: LanguageGrid
                                     key={val}
                                     className="flex items-center gap-1.5 text-xs animate-in fade-in slide-in-from-bottom-1 duration-200"
                                 >
-                                    <span className="w-4 h-4 rounded-full bg-[#C9A84C] text-[#0A0A0A] font-bold flex items-center justify-center text-[10px]">
+                                    <span className="w-4 h-4 rounded-full bg-[#BAE600] text-[#0A0A0A] font-bold flex items-center justify-center text-[10px]">
                                         {idx + 1}
                                     </span>
                                     <span className="text-white/70">{lang?.label ?? val}</span>

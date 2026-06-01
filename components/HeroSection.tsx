@@ -8,9 +8,9 @@ export default function HeroSection() {
     return (
         <div className="text-center rtl:text-right">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#C9A84C]/30 bg-[#C9A84C]/5 mb-6">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#C9A84C] animate-pulse" />
-                <span className="text-[11px] font-medium text-[#C9A84C] uppercase tracking-widest">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#BAE600]/30 bg-[#BAE600]/5 mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#BAE600] animate-pulse" />
+                <span className="text-[11px] font-medium text-[#BAE600] uppercase tracking-widest">
                     AI-Powered UGC
                 </span>
             </div>
@@ -25,9 +25,9 @@ export default function HeroSection() {
 
             {/* Decorative line */}
             <div className="mt-8 flex items-center justify-center gap-3 rtl:flex-row-reverse">
-                <div className="h-px w-16 bg-gradient-to-r from-transparent to-[#C9A84C]/40" />
-                <div className="w-1 h-1 rounded-full bg-[#C9A84C]/60" />
-                <div className="h-px w-16 bg-gradient-to-l from-transparent to-[#C9A84C]/40" />
+                <div className="h-px w-16 bg-gradient-to-r from-transparent to-[#BAE600]/40" />
+                <div className="w-1 h-1 rounded-full bg-[#BAE600]/60" />
+                <div className="h-px w-16 bg-gradient-to-l from-transparent to-[#BAE600]/40" />
             </div>
         </div>
     );

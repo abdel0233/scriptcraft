@@ -22,12 +22,12 @@ const cairo = Cairo({
 });
 
 export const metadata: Metadata = {
-  title: "ScriptCraft — AI-Powered UGC Script Generator",
+  title: "Flowmark Script writer — AI-Powered UGC Script Generator",
   description:
     "Fill in your brand brief and receive AI-generated UGC scripts in multiple languages, delivered directly to your inbox.",
   keywords: "UGC scripts, AI content, brand brief, TikTok scripts, social media",
   openGraph: {
-    title: "ScriptCraft",
+    title: "Flowmark Script writer",
     description: "Fill in your brand brief — AI-generated UGC scripts delivered to your inbox.",
     type: "website",
   },

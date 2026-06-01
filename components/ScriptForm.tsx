@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslation } from "@/lib/i18n/useTranslation";
 import {
     PLATFORM_OPTIONS,
@@ -40,6 +40,93 @@ export default function ScriptForm() {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [webhookError, setWebhookError] = useState("");
+    const [token, setToken] = useState("");
+    const [clientName, setClientName] = useState("");
+    const [brandName, setBrandName] = useState("");
+    const [isTokenValid, setIsTokenValid] = useState<boolean | null>(null);
+    const [isCheckingToken, setIsCheckingToken] = useState<boolean>(true);
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        const checkToken = async () => {
+            try {
+                const tokenVal = searchParams.get("token");
+                if (!tokenVal) {
+                    setIsTokenValid(false);
+                    setIsCheckingToken(false);
+                    return;
+                }
+                setToken(tokenVal);
+
+                const response = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vTWh9SY4OvXb4Bsnyhsj-F9GBgZiUI_7-_JKayGCrJTXuKH2JSHQizA9rYhNY6TVJHaR3fEEaclJhPn/pub?gid=0&single=true&output=csv");
+                if (!response.ok) {
+                    setIsTokenValid(false);
+                    setIsCheckingToken(false);
+                    return;
+                }
+                const csvText = await response.text();
+                
+                const lines = csvText.split(/\r?\n/);
+                if (lines.length < 2) {
+                    setIsTokenValid(false);
+                    setIsCheckingToken(false);
+                    return;
+                }
+                
+                const headers = lines[0].split(',').map(h => h.trim());
+                
+                let foundRow = null;
+                for (let i = 1; i < lines.length; i++) {
+                    if (!lines[i].trim()) continue;
+                    let cols = [];
+                    let inQuotes = false;
+                    let val = '';
+                    for (let j = 0; j < lines[i].length; j++) {
+                        let char = lines[i][j];
+                        if (char === '"') {
+                            inQuotes = !inQuotes;
+                        } else if (char === ',' && !inQuotes) {
+                            cols.push(val);
+                            val = '';
+                        } else {
+                            val += char;
+                        }
+                    }
+                    cols.push(val);
+                    
+                    const obj: Record<string, string> = {};
+                    for (let j = 0; j < headers.length; j++) {
+                        let value = cols[j] || '';
+                        if (value.startsWith('"') && value.endsWith('"')) {
+                            value = value.substring(1, value.length - 1).replace(/""/g, '"');
+                        }
+                        obj[headers[j]] = value;
+                    }
+                    
+                    if (obj['client_id'] === tokenVal) {
+                        foundRow = obj;
+                        break;
+                    }
+                }
+                
+                if (foundRow && foundRow['is_active'] === 'TRUE') {
+                    setIsTokenValid(true);
+                    setClientEmail(foundRow['client_email'] || "");
+                    setProductName(foundRow['brand_name'] || "");
+                    setClientName(foundRow['client_name'] || "");
+                    setBrandName(foundRow['brand_name'] || "");
+                } else {
+                    setIsTokenValid(false);
+                }
+            } catch (err) {
+                console.error("Error checking token:", err);
+                setIsTokenValid(false);
+            } finally {
+                setIsCheckingToken(false);
+            }
+        };
+        checkToken();
+    }, []);
 
     const validate = () => {
         const newErrors: Record<string, string> = {};
@@ -82,8 +169,11 @@ export default function ScriptForm() {
             hookStyle,
             cta,
             competitors,
-            source: "ScriptCraft Portal",
+            source: "Flowmark Script writer Portal",
             submittedAt: new Date().toISOString(),
+            clientName,
+            brandName,
+            token,
         };
 
         try {
@@ -106,13 +196,37 @@ export default function ScriptForm() {
     };
 
     const inputClass =
-        "w-full bg-[#0A0A0A] border border-white/10 rounded-lg px-4 py-3 text-white placeholder-[#444] focus:outline-none focus:border-[#C9A84C]/60 focus:ring-1 focus:ring-[#C9A84C]/20 transition-all duration-150 text-sm rtl:text-right";
+        "w-full bg-[#0A0A0A] border border-white/10 rounded-lg px-4 py-3 text-white placeholder-[#444] focus:outline-none focus:border-[#BAE600]/60 focus:ring-1 focus:ring-[#BAE600]/20 transition-all duration-150 text-sm rtl:text-right";
     const selectClass =
-        "w-full bg-[#0A0A0A] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#C9A84C]/60 focus:ring-1 focus:ring-[#C9A84C]/20 transition-all duration-150 text-sm rtl:text-right appearance-none cursor-pointer";
+        "w-full bg-[#0A0A0A] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#BAE600]/60 focus:ring-1 focus:ring-[#BAE600]/20 transition-all duration-150 text-sm rtl:text-right appearance-none cursor-pointer";
     const labelClass = "block text-sm font-medium text-white/80 mb-2 rtl:text-right";
+
+    if (isCheckingToken) {
+        return (
+            <div className="flex justify-center items-center py-20 text-white">
+                <svg className="animate-spin w-8 h-8 text-[#BAE600]" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+            </div>
+        );
+    }
+
+    if (!isTokenValid) {
+        return (
+            <div className="flex justify-center items-center py-20">
+                <div className="text-center bg-[#111] p-8 rounded-xl border border-white/10 max-w-md w-full">
+                    <p className="text-white/80 text-lg">
+                        This link is no longer active. Please contact us.
+                    </p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <form onSubmit={handleSubmit} noValidate className="space-y-10">
+            <input type="hidden" name="token" value={token} />
 
             {/* Section: Brand & Product */}
             <div>
@@ -309,7 +423,7 @@ export default function ScriptForm() {
             <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 rounded-xl bg-[#C9A84C] text-[#0A0A0A] font-bold text-base tracking-wide hover:bg-[#d4b35a] active:scale-[0.99] transition-all duration-150 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-4 rounded-xl bg-[#BAE600] text-[#0A0A0A] font-bold text-base tracking-wide hover:bg-[#d4b35a] active:scale-[0.99] transition-all duration-150 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
                 {loading ? (
                     <>
