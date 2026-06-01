@@ -60,6 +60,10 @@ export const AUDIENCE_OPTIONS = [
         value: "مراهقات (15-20)",
         labelKey: "audience_teens",
     },
+    {
+        value: "Other",
+        labelKey: "audience_other",
+    },
 ];
 
 export const PLATFORM_OPTIONS = [
