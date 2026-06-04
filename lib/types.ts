@@ -8,7 +8,7 @@ export interface FormPayload {
     targetAudience: string[];
     scriptCount: string;
     scriptIdea: string;
-    platform: string;
+    platform: string[];
     duration: string;
     hookStyle: string;
     cta: string;

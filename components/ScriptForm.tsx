@@ -31,7 +31,7 @@ export default function ScriptForm() {
     const [targetAudience, setTargetAudience] = useState<string[]>([]);
     const [scriptIdea, setScriptIdea] = useState("");
     const [scriptCount, setScriptCount] = useState("1");
-    const [platform, setPlatform] = useState("");
+    const [platform, setPlatform] = useState<string[]>([]);
     const [duration, setDuration] = useState("");
     const [hookStyle, setHookStyle] = useState("");
     const [cta, setCta] = useState("");
@@ -137,6 +137,7 @@ export default function ScriptForm() {
         if (!scriptIdea.trim()) newErrors.scriptIdea = `${t("error_required")} ${t("label_script_idea")}`;
         if (requiredLanguage.length === 0) newErrors.requiredLanguage = t("error_language");
         if (targetAudience.length === 0) newErrors.targetAudience = t("error_audience");
+        if (platform.length === 0) newErrors.platform = `${t("error_required")} ${t("label_platform")}`;
         return newErrors;
     };
 
@@ -326,25 +327,34 @@ export default function ScriptForm() {
                             />
                         </div>
 
-                        <div>
+                        <div data-error={errors.platform ? "true" : undefined}>
                             <label className={labelClass}>{t("label_platform")}</label>
-                            <div className="relative">
-                                <select
-                                    value={platform}
-                                    onChange={(e) => setPlatform(e.target.value)}
-                                    className={selectClass}
-                                >
-                                    <option value="">{t("platform_select")}</option>
-                                    {PLATFORM_OPTIONS.map((o) => (
-                                        <option key={o.value} value={o.value}>{t(o.labelKey)}</option>
-                                    ))}
-                                </select>
-                                <div className="pointer-events-none absolute inset-y-0 end-3 flex items-center">
-                                    <svg className="w-4 h-4 text-[#888]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </div>
+                            <div className="flex flex-wrap gap-2 rtl:flex-row-reverse mt-2">
+                                {PLATFORM_OPTIONS.map((o) => {
+                                    const isSelected = platform.includes(o.value);
+                                    return (
+                                        <button
+                                            key={o.value}
+                                            type="button"
+                                            onClick={() => {
+                                                if (isSelected) {
+                                                    setPlatform(platform.filter(p => p !== o.value));
+                                                } else {
+                                                    setPlatform([...platform, o.value]);
+                                                }
+                                            }}
+                                            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-150 ease-out ${
+                                                isSelected
+                                                    ? "bg-[#BAE600] text-[#0A0A0A] shadow-[0_0_8px_rgba(201,168,76,0.35)] scale-105"
+                                                    : "border border-white/15 text-white/70 hover:border-[#BAE600]/50 hover:text-white"
+                                            }`}
+                                        >
+                                            {t(o.labelKey)}
+                                        </button>
+                                    );
+                                })}
                             </div>
+                            <FieldError msg={errors.platform} />
                         </div>
 
                         <div>
