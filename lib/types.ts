@@ -61,6 +61,18 @@ export const AUDIENCE_OPTIONS = [
         labelKey: "audience_teens",
     },
     {
+        value: "شركات محلية / B2B",
+        labelKey: "audience_b2b",
+    },
+    {
+        value: "أصحاب المنازل",
+        labelKey: "audience_homeowners",
+    },
+    {
+        value: "المهنيون والموظفون",
+        labelKey: "audience_professionals",
+    },
+    {
         value: "Other",
         labelKey: "audience_other",
     },

@@ -30,6 +30,7 @@ export default function ScriptForm() {
     const [requiredLanguage, setRequiredLanguage] = useState<string[]>([]);
     const [targetAudience, setTargetAudience] = useState<string[]>([]);
     const [scriptIdea, setScriptIdea] = useState("");
+    const [scriptCount, setScriptCount] = useState("1");
     const [platform, setPlatform] = useState("");
     const [duration, setDuration] = useState("");
     const [hookStyle, setHookStyle] = useState("");
@@ -162,7 +163,7 @@ export default function ScriptForm() {
             productDefinition,
             requiredLanguage,
             targetAudience,
-            scriptCount: String(requiredLanguage.length),
+            scriptCount,
             scriptIdea,
             platform,
             duration,
@@ -184,7 +185,7 @@ export default function ScriptForm() {
                 JSON.stringify({
                     clientEmail,
                     requiredLanguage,
-                    scriptCount: requiredLanguage.length,
+                    scriptCount: Number(scriptCount),
                 })
             );
             router.push("/success");
@@ -313,7 +314,18 @@ export default function ScriptForm() {
                         <FieldError msg={errors.scriptIdea} />
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label className={labelClass}>{t("label_script_count")}</label>
+                            <input
+                                type="number"
+                                min="1"
+                                value={scriptCount}
+                                onChange={(e) => setScriptCount(e.target.value)}
+                                className={inputClass}
+                            />
+                        </div>
+
                         <div>
                             <label className={labelClass}>{t("label_platform")}</label>
                             <div className="relative">
